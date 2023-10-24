@@ -100,29 +100,14 @@ def latest_class_results_by_subject(subject):
     scores = []
     for name in names:
         foundResults = Result.query.filter_by(subject=subject, student_name=name).all()
-        outputs = map(lambda r: {
-            "score": r.score,
-            }, foundResults
-        )
-        outputs = list(outputs)
-        foundResult = outputs[len(outputs)-1]
-        scores.append(foundResult["score"])
-        # outputs = map(lambda r: {
-        #         "id": r.id,
-        #         "student_name": r.student_name, 
-        #         "subject": r.subject,
-        #         "score": r.score,
-        #         "feedback": r.feedback
-        #         }, foundResults
-        #     )
-    # foundResults = Result.query.filter_by(subject=subject).all()
-    # outputs = map(lambda r: {
-    #         "id": r.id,
-    #         "student_name": r.student_name, 
-    #         "subject": r.subject,
-    #         "score": r.score,
-    #         "feedback": r.feedback
-    #         }, foundResults
-    #     )
-    # usableOutputs = list(outputs)
+        if foundResults:
+            outputs = map(lambda r: {
+                "score": r.score,
+                }, foundResults
+            )
+            outputs = list(outputs)
+            foundResult = outputs[len(outputs)-1]
+            scores.append(foundResult["score"])
+        else:
+            scores.append(0)
     return jsonify(names, scores), 200
