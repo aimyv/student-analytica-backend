@@ -1,5 +1,5 @@
 from flask import Blueprint, request, jsonify
-from ..models.models import Result
+from ..models.models import Result, Student
 from ..database.db import db
 from werkzeug import exceptions
 from sqlalchemy import update, select
@@ -30,6 +30,13 @@ def all_results():
             )
         db.session.add(new_result)
         db.session.commit()
+        if not Student.query.filter_by(name=data["student_name"]).first():
+            new_student = Student(
+                name=data["student_name"],
+                results=[]
+                )
+            db.session.add(new_student)
+            db.session.commit()
         output = {
             "id": new_result.id, 
             "student_name": new_result.student_name,

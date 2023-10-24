@@ -2,7 +2,7 @@ from flask import Blueprint, request, jsonify
 from ..models.models import Student, Result
 from ..database.db import db
 from werkzeug import exceptions
-from sqlalchemy import update, select
+from sqlalchemy import update, select, desc
 
 students = Blueprint("students", __name__)
 

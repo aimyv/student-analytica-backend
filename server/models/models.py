@@ -12,7 +12,7 @@ class Teacher(db.Model, UserMixin):
 # teacher can add new student
 class Student(db.Model):
     name = db.Column(db.String(50), primary_key=True)
-    results = db.relationship('Result', backref='student', passive_deletes=True)  
+    results = db.relationship('Result', backref='student', cascade='all, delete')  
 
 # teacher enters student id, subject, score and feedback
 class Result(db.Model):
