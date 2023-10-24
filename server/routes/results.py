@@ -85,3 +85,44 @@ def class_results_by_subject(subject):
         )
     usableOutputs = list(outputs)
     return jsonify(usableOutputs), 200
+
+@results.route('/results/<subject>/latest', methods=['GET'])
+def latest_class_results_by_subject(subject):
+    students = Student.query.all()
+    outputs = map(lambda s: {
+        "name": s.name
+        }, students)
+    usableOutputs = list(outputs)
+    names = set()
+    for i in usableOutputs:
+        names.add(i["name"])
+    names = list(names)
+    scores = []
+    for name in names:
+        foundResults = Result.query.filter_by(subject=subject, student_name=name).all()
+        outputs = map(lambda r: {
+            "score": r.score,
+            }, foundResults
+        )
+        outputs = list(outputs)
+        foundResult = outputs[len(outputs)-1]
+        scores.append(foundResult["score"])
+        # outputs = map(lambda r: {
+        #         "id": r.id,
+        #         "student_name": r.student_name, 
+        #         "subject": r.subject,
+        #         "score": r.score,
+        #         "feedback": r.feedback
+        #         }, foundResults
+        #     )
+    # foundResults = Result.query.filter_by(subject=subject).all()
+    # outputs = map(lambda r: {
+    #         "id": r.id,
+    #         "student_name": r.student_name, 
+    #         "subject": r.subject,
+    #         "score": r.score,
+    #         "feedback": r.feedback
+    #         }, foundResults
+    #     )
+    # usableOutputs = list(outputs)
+    return jsonify(names, scores), 200
