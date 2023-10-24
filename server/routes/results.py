@@ -86,7 +86,7 @@ def class_results_by_subject(subject):
     usableOutputs = list(outputs)
     return jsonify(usableOutputs), 200
 
-@results.route('/results/<subject>/latest', methods=['GET'])
+@results.route('/results/<subject>/average', methods=['GET'])
 def latest_class_results_by_subject(subject):
     students = Student.query.all()
     outputs = map(lambda s: {
@@ -106,8 +106,11 @@ def latest_class_results_by_subject(subject):
                 }, foundResults
             )
             outputs = list(outputs)
-            foundResult = outputs[len(outputs)-1]
-            scores.append(foundResult["score"])
+            sum_ = 0
+            for output in outputs:
+                sum_ += output["score"]
+            foundResult = sum_ / len(outputs)
+            scores.append(foundResult)
         else:
             scores.append(0)
     return jsonify(names, scores), 200
