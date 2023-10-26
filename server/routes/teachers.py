@@ -7,7 +7,7 @@ from sqlalchemy import update, select
 
 teachers = Blueprint("teachers", __name__)
 
-
+# view all teachers registered to student analytica portal
 @teachers.route('/teachers')
 def all_teachers():
     teachers = Teacher.query.all()

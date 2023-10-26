@@ -6,7 +6,8 @@ from sqlalchemy import update, select, desc
 
 students = Blueprint("students", __name__)
 
-
+# view all students
+# add a new student
 @students.route('/students', methods=['GET', 'POST'])
 def all_students():
     if request.method == 'GET':
@@ -29,6 +30,8 @@ def all_students():
             "results": new_student.results}
         return jsonify(output), 201
 
+# view a specific student
+# delete a specific student
 @students.route('/students/<student_name>', methods=['GET', 'DELETE'])
 def students_handler(student_name):
     if request.method == 'GET':
@@ -51,6 +54,7 @@ def students_handler(student_name):
             raise exceptions.BadRequest(
                 f"Failed to delete a student with that name: {student_name}")
 
+# view all results for a specific student
 @students.route('/students/<student_name>/results', methods=['GET'])
 def student_results(student_name):
     foundResults = Result.query.filter_by(student_name=student_name).all()
@@ -65,6 +69,7 @@ def student_results(student_name):
     usableOutputs = list(outputs)
     return jsonify(usableOutputs), 200
 
+# view all results for a specific subject and student
 @students.route('/students/<student_name>/results/<subject>', methods=['GET'])
 def student_results_by_subject(student_name, subject):
     foundResults = Result.query.filter_by(student_name=student_name, subject=subject).all()

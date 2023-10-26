@@ -7,7 +7,8 @@ from werkzeug import exceptions
 
 auth = Blueprint('auth', __name__)
 
-@auth.route("/login", methods=['GET', 'POST'])
+# login with email and password
+@auth.route("/login", methods=['POST'])
 def login():
     if request.method == 'POST':
         data = request.json
@@ -23,10 +24,8 @@ def login():
                 raise exceptions.BadRequest(f"Password is incorrect.")
         else:
             raise exceptions.NotFound(f"User doesn't exist.")
-    else:
-        raise exceptions.BadRequest(
-            f"Send a POST request with the relevant attributes.")
 
+# register with username, email, password and confirmed password
 @auth.route("/register", methods=['GET', 'POST'])
 def sign_up():
     if request.method == 'POST':
@@ -58,6 +57,7 @@ def sign_up():
         raise exceptions.BadRequest(
             f"Send a POST request with the relevant attributes.")
 
+# user logout
 @login_required
 @auth.route("/logout")
 def logout():

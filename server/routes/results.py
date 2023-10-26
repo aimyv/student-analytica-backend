@@ -6,7 +6,8 @@ from sqlalchemy import update, select
 
 results = Blueprint("results", __name__)
 
-
+# view all results
+# add new result, add new student if student_name is not already a student
 @results.route('/results', methods=['GET', 'POST'])
 def all_results():
     if request.method == 'GET':
@@ -46,6 +47,8 @@ def all_results():
             }
         return jsonify(output), 201
 
+# view specific result
+# delete specific result
 @results.route('/results/<int:result_id>', methods=['GET', 'DELETE'])
 def results_handler(result_id):
     if request.method == 'GET':
@@ -72,6 +75,7 @@ def results_handler(result_id):
             raise exceptions.BadRequest(
                 f"Failed to delete a result with that id: {result_id}")
 
+# view all results for a specific subject
 @results.route('/results/<subject>', methods=['GET'])
 def class_results_by_subject(subject):
     foundResults = Result.query.filter_by(subject=subject).all()
@@ -86,6 +90,7 @@ def class_results_by_subject(subject):
     usableOutputs = list(outputs)
     return jsonify(usableOutputs), 200
 
+# view a list of students and their average for a specific subject
 @results.route('/results/<subject>/average', methods=['GET'])
 def latest_class_results_by_subject(subject):
     students = Student.query.all()
