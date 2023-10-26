@@ -1,10 +1,14 @@
 from flask import Blueprint, request, jsonify
 from werkzeug import exceptions
 import openai
+import os
+from dotenv import load_dotenv, find_dotenv
+
+load_dotenv(find_dotenv())
 
 views = Blueprint('views', __name__)
 
-openai.api_key = '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'
+openai.api_key_path = '.env'
 
 @views.route("/")
 def hello_world():
